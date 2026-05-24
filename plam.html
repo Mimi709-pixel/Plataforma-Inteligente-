@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Plataforma Inteligente de Gestión del Mantenimiento</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --azul: #1a3a6b;
+    --azul-claro: #2563a8;
+    --azul-medio: #1e4f8c;
+    --gris: #4a5568;
+    --gris-claro: #edf2f7;
+    --gris-metal: #b0bec5;
+    --blanco: #ffffff;
+    --verde: #22c55e;
+    --rojo: #ef4444;
+    --naranja: #f59e0b;
+    --sombra: 0 4px 24px rgba(26,58,107,0.10);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: #f0f4fa;
+    color: #1a2340;
+    min-height: 100vh;
+  }
+
+  /* ---- NAVBAR ---- */
+  nav {
+    background: var(--azul);
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(26,58,107,0.25);
+  }
+  .nav-inner {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+  }
+  .nav-logo i { font-size: 1.5rem; color: #60a5fa; }
+  .nav-links {
+    display: flex;
+    gap: 0.25rem;
+    list-style: none;
+  }
+  .nav-links a {
+    display: block;
+    padding: 0.4rem 0.85rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-links a:hover { background: rgba(255,255,255,0.10); color: #fff; }
+
+  /* ---- HERO ---- */
+  .hero {
+    background: linear-gradient(135deg, #1a3a6b 0%, #1e4f8c 55%, #2563a8 100%);
+    padding: 4.5rem 2rem 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    top: -200px; right: -150px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    bottom: -180px; left: -100px;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.12);
+    color: #93c5fd;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.35rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1.2rem;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    max-width: 760px;
+    margin: 0 auto 1rem;
+  }
+  .hero p {
+    color: #bfdbfe;
+    font-size: 1rem;
+    max-width: 620px;
+    margin: 0 auto 0.8rem;
+    line-height: 1.7;
+  }
+  .hero-meta {
+    color: #93c5fd;
+    font-size: 0.82rem;
+    margin-bottom: 2rem;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .stat-box {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 1.1rem 1.8rem;
+    min-width: 140px;
+    transition: background 0.2s;
+  }
+  .stat-box:hover { background: rgba(255,255,255,0.14); }
+  .stat-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    display: block;
+  }
+  .stat-label { font-size: 0.78rem; color: #93c5fd; font-weight: 500; }
+
+  /* ---- SECTION BASE ---- */
+  section { padding: 3.5rem 2rem; }
+  .section-inner { max-width: 1200px; margin: auto; }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--azul);
+    margin-bottom: 0.4rem;
+  }
+  .section-sub {
+    color: var(--gris);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .section-divider {
+    width: 48px; height: 4px;
+    background: var(--azul-claro);
+    border-radius: 2px;
+    margin-bottom: 2rem;
+  }
+
+  /* ---- CARDS GRID ---- */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: var(--sombra);
+    border: 1px solid #e2e8f0;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(26,58,107,0.13); }
+  .card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+  .card-icon.azul { background: #dbeafe; color: #1d4ed8; }
+  .card-icon.verde { background: #dcfce7; color: #16a34a; }
+  .card-icon.rojo { background: #fee2e2; color: #dc2626; }
+  .card-icon.naranja { background: #fef3c7; color: #d97706; }
+  .card-icon.gris { background: #f1f5f9; color: #475569; }
+  .card-icon.indigo { background: #e0e7ff; color: #4338ca; }
+  .card-icon.cyan { background: #cffafe; color: #0e7490; }
+  .card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--azul);
+    margin-bottom: 0.5rem;
+  }
+  .card p { font-size: 0.83rem; color: var(--gris); line-height: 1.6; }
+  .card ul {
+    margin-top: 0.75rem;
+    padding-left: 1rem;
+    list-style: disc;
+  }
+  .card ul li { font-size: 0.82rem; color: var(--gris); line-height: 1.7; }
+
+  /* ---- DASHBOARD ---- */
+  #dashboard { background: #fff; }
+  .dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .dash-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.2rem 1rem;
+    text-align: center;
+  }
+  .dash-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+  }
+  .dash-num.v { color: #16a34a; }
+  .dash-num.a { color: #d97706; }
+  .dash-num.r { color: #dc2626; }
+  .dash-num.b { color: #2563a8; }
+  .dash-lbl { font-size: 0.78rem; color: var(--gris); margin-top: 0.2rem; font-weight: 500; }
+  .progress-block { margin-bottom: 1rem; }
+  .prog-header { display: flex; justify-content: space-between; font-size: 0.83rem; margin-bottom: 0.3rem; font-weight: 500; }
+  .prog-bar { background: #e2e8f0; border-radius: 20px; height: 10px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 20px; transition: width 1.2s ease; }
+  .prog-fill.v { background: #22c55e; }
+  .prog-fill.a { background: #f59e0b; }
+  .prog-fill.r { background: #ef4444; }
+  .prog-fill.b { background: #2563a8; }
+
+  /* ---- CHECKLIST ---- */
+  .checklist-wrapper { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .checklist-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: var(--sombra);
+    border: 1px solid #e2e8f0;
+  }
+  .checklist-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--azul);
+    margin-bottom: 1rem;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.83rem;
+    color: var(--gris);
+    cursor: pointer;
+    transition: background 0.15s;
+    border-radius: 6px;
+    padding-left: 0.3rem;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:hover { background: #f8fafc; }
+  .check-item input[type=checkbox] { accent-color: #2563a8; width: 16px; height: 16px; cursor: pointer; }
+  .check-item.done { text-decoration: line-through; color: #94a3b8; }
+
+  /* ---- FALLAS ---- */
+  .fallas-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  .fallas-table th {
+    background: var(--azul);
+    color: #fff;
+    padding: 0.7rem 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .fallas-table td { padding: 0.7rem 1rem; border-bottom: 1px solid #e2e8f0; color: var(--gris); }
+  .fallas-table tr:hover td { background: #f8fafc; }
+  .badge {
+    display: inline-block;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+  .badge.alta { background: #fee2e2; color: #dc2626; }
+  .badge.media { background: #fef3c7; color: #d97706; }
+  .badge.baja { background: #dcfce7; color: #16a34a; }
+  .badge.resuelta { background: #dbeafe; color: #1d4ed8; }
+  .badge.pendiente { background: #f1f5f9; color: #475569; }
+
+  /* ---- TRAZABILIDAD ---- */
+  .traza-flow {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  .traza-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 100px;
+  }
+  .traza-circle {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--azul);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    flex-shrink: 0;
+  }
+  .traza-circle.verde { background: #16a34a; }
+  .traza-circle.naranja { background: #d97706; }
+  .traza-circle.rojo { background: #dc2626; }
+  .traza-lbl { font-size: 0.75rem; font-weight: 600; color: var(--azul); margin-top: 0.5rem; text-align: center; }
+  .traza-arrow {
+    width: 36px; height: 2px;
+    background: #cbd5e1;
+    margin-top: 25px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .traza-arrow::after {
+    content: '▶';
+    position: absolute;
+    right: -8px; top: -7px;
+    color: #cbd5e1;
+    font-size: 10px;
+  }
+
+  /* ---- BASE DE CONOCIMIENTO ---- */
+  .doc-list { display: flex; flex-direction: column; gap: 0.75rem; }
+  .doc-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 4px rgba(26,58,107,0.06);
+    transition: box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .doc-item:hover { box-shadow: 0 4px 16px rgba(26,58,107,0.10); }
+  .doc-icon { font-size: 1.2rem; width: 36px; text-align: center; }
+  .doc-name { font-size: 0.87rem; font-weight: 600; color: var(--azul); }
+  .doc-desc { font-size: 0.78rem; color: var(--gris); }
+  .doc-tag {
+    margin-left: auto;
+    padding: 0.2rem 0.6rem;
+    background: #dbeafe;
+    color: #1d4ed8;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ---- USUARIOS ---- */
+  .users-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+  .user-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: var(--sombra);
+  }
+  .user-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0 auto 0.7rem;
+    color: #fff;
+  }
+  .user-avatar.azul { background: #2563a8; }
+  .user-avatar.verde { background: #16a34a; }
+  .user-avatar.naranja { background: #d97706; }
+  .user-avatar.indigo { background: #4338ca; }
+  .user-name { font-weight: 700; font-size: 0.9rem; color: var(--azul); }
+  .user-role { font-size: 0.78rem; color: var(--gris); margin-bottom: 0.7rem; }
+  .user-perms { display: flex; flex-wrap: wrap; gap: 0.3rem; justify-content: center; }
+  .perm-tag {
+    background: #f1f5f9;
+    color: #475569;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+    font-weight: 500;
+  }
+
+  /* ---- CRONOGRAMA ---- */
+  .cronograma-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+  .cronograma-table th {
+    background: var(--azul-medio);
+    color: #fff;
+    padding: 0.65rem 0.9rem;
+    text-align: left;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .cronograma-table td { padding: 0.65rem 0.9rem; border-bottom: 1px solid #e2e8f0; color: var(--gris); }
+  .cronograma-table tr:hover td { background: #f8fafc; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: var(--azul);
+    color: #93c5fd;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.82rem;
+  }
+  footer strong { color: #fff; }
+
+  /* ---- BG ALT ---- */
+  .bg-alt { background: #f8fafc; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <i class="fas fa-cogs"></i>
+      <span>PIGMKI</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#modulos">Módulos</a></li>
+      <li><a href="#conocimiento">Conocimiento</a></li>
+      <li><a href="#inspección">Inspección</a></li>
+      <li><a href="#fallas">Fallas</a></li>
+      <li><a href="#trazabilidad">Trazabilidad</a></li>
+      <li><a href="#usuarios">Usuarios</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="inicio">
+  <div class="hero-tag">Prototipo funcional · Gestión del Conocimiento</div>
+  <h1>Plataforma Inteligente de Gestión del Mantenimiento y Conocimiento Industrial</h1>
+  <p>Sistema digital para centralizar el conocimiento técnico, optimizar el mantenimiento preventivo de maquinaria industrial y apoyar la toma de decisiones organizacional.</p>
+  <p class="hero-meta">
+    <strong style="color:#fff">Carmen Granados Tamayo</strong> &nbsp;·&nbsp; Tutor: Gerson García Caicedo &nbsp;·&nbsp; Código 207027 · Grupo 70
+  </p>
+  <p class="hero-meta">Universidad Nacional Abierta y a Distancia – UNAD &nbsp;·&nbsp; Gestión del Conocimiento · 2026</p>
+  <div class="hero-stats">
+    <div class="stat-box">
+      <span class="stat-num" id="cnt-mant">24</span>
+      <span class="stat-label">Mantenimientos realizados</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="cnt-equipos">8</span>
+      <span class="stat-label">Equipos pendientes</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="cnt-fallas">5</span>
+      <span class="stat-label">Fallas recurrentes</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num" id="cnt-docs">37</span>
+      <span class="stat-label">Documentos técnicos</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">92<span style="font-size:1.2rem">%</span></span>
+      <span class="stat-label">Cumplimiento cronograma</span>
+    </div>
+  </div>
+</header>
+
+<!-- DASHBOARD -->
+<section id="dashboard">
+  <div class="section-inner">
+    <div class="section-title">Dashboard de indicadores</div>
+    <div class="section-sub">Resumen ejecutivo del estado actual del mantenimiento industrial</div>
+    <div class="section-divider"></div>
+    <div class="dash-grid">
+      <div class="dash-card"><span class="dash-num v">24</span><div class="dash-lbl">Mantenimientos realizados</div></div>
+      <div class="dash-card"><span class="dash-num a">8</span><div class="dash-lbl">Equipos pendientes</div></div>
+      <div class="dash-card"><span class="dash-num r">5</span><div class="dash-lbl">Fallas recurrentes</div></div>
+      <div class="dash-card"><span class="dash-num b">2.4h</span><div class="dash-lbl">Tiempo promedio de respuesta</div></div>
+      <div class="dash-card"><span class="dash-num v">92%</span><div class="dash-lbl">Cumplimiento de cronograma</div></div>
+    </div>
+    <div class="progress-block"><div class="prog-header"><span>Mantenimientos completados</span><span>92%</span></div><div class="prog-bar"><div class="prog-fill v" style="width:92%"></div></div></div>
+    <div class="progress-block"><div class="prog-header"><span>Equipos en operación normal</span><span>78%</span></div><div class="prog-bar"><div class="prog-fill b" style="width:78%"></div></div></div>
+    <div class="progress-block"><div class="prog-header"><span>Fallas resueltas este mes</span><span>65%</span></div><div class="prog-bar"><div class="prog-fill a" style="width:65%"></div></div></div>
+    <div class="progress-block"><div class="prog-header"><span>Incidencias críticas activas</span><span>18%</span></div><div class="prog-bar"><div class="prog-fill r" style="width:18%"></div></div></div>
+  </div>
+</section>
+
+<!-- MÓDULOS -->
+<section id="modulos" class="bg-alt">
+  <div class="section-inner">
+    <div class="section-title">Módulos del sistema</div>
+    <div class="section-sub">Estructura general del prototipo con todos los módulos obligatorios</div>
+    <div class="section-divider"></div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon azul"><i class="fas fa-calendar-alt"></i></div>
+        <h3>Programación de mantenimiento</h3>
+        <p>Cronograma de actividades, equipos programados y estado de ejecución en tiempo real.</p>
+        <ul>
+          <li>Cronograma de mantenimientos</li>
+          <li>Calendario de actividades</li>
+          <li>Equipos programados</li>
+          <li>Estado de ejecución</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon indigo"><i class="fas fa-book-open"></i></div>
+        <h3>Base de conocimiento técnico</h3>
+        <p>Repositorio central de manuales, procedimientos y lecciones aprendidas del proceso industrial.</p>
+        <ul>
+          <li>Manuales técnicos</li>
+          <li>Procedimientos operativos</li>
+          <li>Protocolos de seguridad</li>
+          <li>Lecciones aprendidas</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon verde"><i class="fas fa-clipboard-check"></i></div>
+        <h3>Inspección y validación</h3>
+        <p>Checklist digital de revisión, registro de hallazgos y validación técnica de maquinaria.</p>
+        <ul>
+          <li>Checklist digital</li>
+          <li>Registro de hallazgos</li>
+          <li>Estado de maquinaria</li>
+          <li>Validación técnica</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon rojo"><i class="fas fa-exclamation-triangle"></i></div>
+        <h3>Registro de fallas e incidencias</h3>
+        <p>Documentación de fallas recurrentes, causas y seguimiento de acciones correctivas.</p>
+        <ul>
+          <li>Fallas recurrentes</li>
+          <li>Causas documentadas</li>
+          <li>Acciones correctivas</li>
+          <li>Seguimiento de soluciones</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon naranja"><i class="fas fa-chart-bar"></i></div>
+        <h3>Dashboard de indicadores</h3>
+        <p>Visualización de KPIs de mantenimiento, cumplimiento y eficiencia operativa.</p>
+        <ul>
+          <li>Mantenimientos realizados</li>
+          <li>Equipos pendientes</li>
+          <li>Tiempo de respuesta</li>
+          <li>Cumplimiento de cronogramas</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon cyan"><i class="fas fa-route"></i></div>
+        <h3>Trazabilidad del proceso</h3>
+        <p>Flujo completo del mantenimiento con historial, responsables y fechas de ejecución.</p>
+        <ul>
+          <li>Flujo del mantenimiento</li>
+          <li>Historial de intervenciones</li>
+          <li>Responsables asignados</li>
+          <li>Fechas de ejecución</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-icon gris"><i class="fas fa-users-cog"></i></div>
+        <h3>Gestión de usuarios</h3>
+        <p>Administración de roles, permisos y seguridad de la información por perfil de acceso.</p>
+        <ul>
+          <li>Roles y permisos</li>
+          <li>Acceso por perfil</li>
+          <li>Seguridad de la información</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BASE DE CONOCIMIENTO -->
+<section id="conocimiento">
+  <div class="section-inner">
+    <div class="section-title">Base de conocimiento técnico</div>
+    <div class="section-sub">Repositorio de documentos, manuales y protocolos del proceso industrial</div>
+    <div class="section-divider"></div>
+    <div class="doc-list">
+      <div class="doc-item"><span class="doc-icon" style="color:#1d4ed8">📘</span><div><div class="doc-name">Manual de Mantenimiento Preventivo – Tornos CNC</div><div class="doc-desc">Procedimientos estándar para inspección y lubricación</div></div><span class="doc-tag">Manual técnico</span></div>
+      <div class="doc-item"><span class="doc-icon" style="color:#dc2626">🛡️</span><div><div class="doc-name">Protocolo de Seguridad – Área de Prensas</div><div class="doc-desc">Normativa EPP, bloqueo de energías y evacuación</div></div><span class="doc-tag">Seguridad</span></div>
+      <div class="doc-item"><span class="doc-icon" style="color:#16a34a">📋</span><div><div class="doc-name">Procedimiento Operativo – Cambio de Aceite Industrial</div><div class="doc-desc">Pasos, frecuencia y especificaciones de lubricante</div></div><span class="doc-tag">Procedimiento</span></div>
+      <div class="doc-item"><span class="doc-icon" style="color:#d97706">📖</span><div><div class="doc-name">Instructivo de Calibración – Equipos de Medición</div><div class="doc-desc">Frecuencia, tolerancias y registro de calibración</div></div><span class="doc-tag">Instructivo</span></div>
+      <div class="doc-item"><span class="doc-icon" style="color:#4338ca">💡</span><div><div class="doc-name">Lecciones Aprendidas – Falla en Banda Transportadora</div><div class="doc-desc">Causa raíz, acciones correctivas y preventivas aplicadas</div></div><span class="doc-tag">Lección aprendida</span></div>
+      <div class="doc-item"><span class="doc-icon" style="color:#0e7490">🔧</span><div><div class="doc-name">Manual de Operación – Compresores de Aire</div><div class="doc-desc">Arranque, parada, alarmas y mantenimiento básico</div></div><span class="doc-tag">Manual técnico</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSPECCIÓN Y VALIDACIÓN -->
+<section id="inspección" class="bg-alt">
+  <div class="section-inner">
+    <div class="section-title">Inspección y validación</div>
+    <div class="section-sub">Checklist digital de revisión técnica de maquinaria industrial</div>
+    <div class="section-divider"></div>
+    <div class="checklist-wrapper">
+      <div class="checklist-card">
+        <h4><i class="fas fa-cog" style="color:#2563a8;margin-right:6px"></i>Revisión mecánica</h4>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Verificación de alineación de ejes</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Inspección de rodamientos y cojinetes</label>
+        <label class="check-item" ><input type="checkbox" checked onchange="toggleDone(this)" /> Lubricación de piezas móviles</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Revisión de correas y cadenas de transmisión</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Ajuste de tornillería y sujetadores</label>
+      </div>
+      <div class="checklist-card">
+        <h4><i class="fas fa-bolt" style="color:#d97706;margin-right:6px"></i>Revisión eléctrica</h4>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Verificación de conexiones eléctricas</label>
+        <label class="check-item"><input type="checkbox" checked onchange="toggleDone(this)" /> Inspección de tableros de control</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Medición de voltaje y corriente</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Revisión de protecciones eléctricas</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Estado de sensores y actuadores</label>
+      </div>
+      <div class="checklist-card">
+        <h4><i class="fas fa-shield-alt" style="color:#dc2626;margin-right:6px"></i>Seguridad y cumplimiento</h4>
+        <label class="check-item"><input type="checkbox" checked onchange="toggleDone(this)" /> Equipos de protección personal disponibles</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Señalización de áreas de riesgo</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Verificación de extintores</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Plan de emergencia visible</label>
+        <label class="check-item"><input type="checkbox" onchange="toggleDone(this)" /> Limpieza y orden del área de trabajo</label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRO DE FALLAS -->
+<section id="fallas">
+  <div class="section-inner">
+    <div class="section-title">Registro de fallas e incidencias</div>
+    <div class="section-sub">Historial de fallas recurrentes, causas documentadas y seguimiento de soluciones</div>
+    <div class="section-divider"></div>
+    <div style="overflow-x:auto; border-radius:12px; border:1px solid #e2e8f0; box-shadow:var(--sombra);">
+      <table class="fallas-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Equipo</th>
+            <th>Descripción de la falla</th>
+            <th>Causa raíz</th>
+            <th>Prioridad</th>
+            <th>Estado</th>
+            <th>Técnico responsable</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>F-001</td><td>Torno CNC #3</td><td>Vibración excesiva en husillo</td><td>Desbalance de pieza</td><td><span class="badge alta">Alta</span></td><td><span class="badge resuelta">Resuelta</span></td><td>J. Pérez</td></tr>
+          <tr><td>F-002</td><td>Banda transportadora</td><td>Desalineación del sistema de transmisión</td><td>Desgaste de rodillos</td><td><span class="badge alta">Alta</span></td><td><span class="badge pendiente">Pendiente</span></td><td>M. Torres</td></tr>
+          <tr><td>F-003</td><td>Compresor #1</td><td>Caída de presión anormal</td><td>Válvula de retención defectuosa</td><td><span class="badge media">Media</span></td><td><span class="badge resuelta">Resuelta</span></td><td>R. López</td></tr>
+          <tr><td>F-004</td><td>Prensa hidráulica</td><td>Fuga de aceite hidráulico</td><td>Sellos desgastados</td><td><span class="badge alta">Alta</span></td><td><span class="badge pendiente">Pendiente</span></td><td>J. Pérez</td></tr>
+          <tr><td>F-005</td><td>Panel de control</td><td>Alarma de sobrecalentamiento frecuente</td><td>Ventilación insuficiente</td><td><span class="badge media">Media</span></td><td><span class="badge resuelta">Resuelta</span></td><td>C. Ramírez</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- TRAZABILIDAD -->
+<section id="trazabilidad" class="bg-alt">
+  <div class="section-inner">
+    <div class="section-title">Trazabilidad del proceso</div>
+    <div class="section-sub">Flujo del proceso de mantenimiento preventivo industrial</div>
+    <div class="section-divider"></div>
+    <div class="traza-flow">
+      <div class="traza-step">
+        <div class="traza-circle">1</div>
+        <div class="traza-lbl">Solicitud<br>de mantenimiento</div>
+      </div>
+      <div class="traza-arrow"></div>
+      <div class="traza-step">
+        <div class="traza-circle naranja">2</div>
+        <div class="traza-lbl">Programación<br>de actividad</div>
+      </div>
+      <div class="traza-arrow"></div>
+      <div class="traza-step">
+        <div class="traza-circle" style="background:#4338ca">3</div>
+        <div class="traza-lbl">Asignación<br>de técnico</div>
+      </div>
+      <div class="traza-arrow"></div>
+      <div class="traza-step">
+        <div class="traza-circle" style="background:#0e7490">4</div>
+        <div class="traza-lbl">Ejecución<br>en campo</div>
+      </div>
+      <div class="traza-arrow"></div>
+      <div class="traza-step">
+        <div class="traza-circle verde">5</div>
+        <div class="traza-lbl">Inspección<br>y validación</div>
+      </div>
+      <div class="traza-arrow"></div>
+      <div class="traza-step">
+        <div class="traza-circle" style="background:#d97706">6</div>
+        <div class="traza-lbl">Registro<br>y documentación</div>
+      </div>
+      <div class="traza-arrow"></div>
+      <div class="traza-step">
+        <div class="traza-circle verde">7</div>
+        <div class="traza-lbl">Cierre y<br>base de conocimiento</div>
+      </div>
+    </div>
+    <div style="margin-top:2.5rem; overflow-x:auto; border-radius:12px; border:1px solid #e2e8f0; box-shadow:var(--sombra);">
+      <table class="cronograma-table">
+        <thead>
+          <tr><th>Equipo</th><th>Tipo de mantenimiento</th><th>Técnico</th><th>Fecha programada</th><th>Estado</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Torno CNC #1</td><td>Preventivo general</td><td>J. Pérez</td><td>2026-06-05</td><td><span class="badge resuelta">Completado</span></td></tr>
+          <tr><td>Banda transportadora A</td><td>Lubricación y ajuste</td><td>M. Torres</td><td>2026-06-10</td><td><span class="badge media">En proceso</span></td></tr>
+          <tr><td>Compresor #2</td><td>Cambio de filtros</td><td>R. López</td><td>2026-06-15</td><td><span class="badge pendiente">Pendiente</span></td></tr>
+          <tr><td>Prensa hidráulica</td><td>Inspección de sellos</td><td>J. Pérez</td><td>2026-06-18</td><td><span class="badge pendiente">Pendiente</span></td></tr>
+          <tr><td>Sistema eléctrico zona B</td><td>Revisión de tableros</td><td>C. Ramírez</td><td>2026-06-22</td><td><span class="badge pendiente">Pendiente</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- USUARIOS -->
+<section id="usuarios">
+  <div class="section-inner">
+    <div class="section-title">Gestión de usuarios</div>
+    <div class="section-sub">Roles, permisos y acceso por perfil de la plataforma</div>
+    <div class="section-divider"></div>
+    <div class="users-grid">
+      <div class="user-card">
+        <div class="user-avatar azul">AD</div>
+        <div class="user-name">Administrador</div>
+        <div class="user-role">Acceso total al sistema</div>
+        <div class="user-perms">
+          <span class="perm-tag">Ver todo</span>
+          <span class="perm-tag">Editar</span>
+          <span class="perm-tag">Eliminar</span>
+          <span class="perm-tag">Configurar</span>
+        </div>
+      </div>
+      <div class="user-card">
+        <div class="user-avatar indigo">JE</div>
+        <div class="user-name">Jefe de mantenimiento</div>
+        <div class="user-role">Supervisión y aprobación</div>
+        <div class="user-perms">
+          <span class="perm-tag">Ver todo</span>
+          <span class="perm-tag">Aprobar</span>
+          <span class="perm-tag">Reportes</span>
+        </div>
+      </div>
+      <div class="user-card">
+        <div class="user-avatar verde">TE</div>
+        <div class="user-name">Técnico de campo</div>
+        <div class="user-role">Ejecución y registro</div>
+        <div class="user-perms">
+          <span class="perm-tag">Checklist</span>
+          <span class="perm-tag">Fallas</span>
+          <span class="perm-tag">Documentos</span>
+        </div>
+      </div>
+      <div class="user-card">
+        <div class="user-avatar naranja">IN</div>
+        <div class="user-name">Inspector</div>
+        <div class="user-role">Validación técnica</div>
+        <div class="user-perms">
+          <span class="perm-tag">Ver</span>
+          <span class="perm-tag">Validar</span>
+          <span class="perm-tag">Firmar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Plataforma Inteligente de Gestión del Mantenimiento y Conocimiento Industrial</strong></p>
+  <p style="margin-top:0.4rem">Carmen Granados Tamayo · Código 207027 · Grupo 70 · UNAD · Gestión del Conocimiento · 2026</p>
+</footer>
+
+<script>
+  function toggleDone(cb) {
+    const item = cb.closest('.check-item');
+    if (cb.checked) item.classList.add('done');
+    else item.classList.remove('done');
+  }
+  document.querySelectorAll('.check-item input[type=checkbox]').forEach(cb => {
+    if (cb.checked) cb.closest('.check-item').classList.add('done');
+  });
+</script>
+</body>
+</html>
